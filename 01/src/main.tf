@@ -4,12 +4,15 @@ terraform {
       source  = "kreuzwerker/docker"
       version = "~> 3.0.1"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.0"
+    }
   }
-  required_version = ">=1.8.4" /*Многострочный комментарий.
- Требуемая версия terraform */
+  required_version = ">=1.8.4" #Требуемая версия terraform
 }
 provider "docker" {}
-
+provider "random" {}
 #однострочный комментарий
 
 resource "random_password" "random_string" {
@@ -20,14 +23,14 @@ resource "random_password" "random_string" {
   min_numeric = 1
 }
 
-resource "docker_image" {
+resource "docker_image" "nginx" {
   name         = "nginx:latest"
   keep_locally = true
 }
 
 resource "docker_container" "nginx" {
-  image = docker_image.nginx.image_id
-  name  = "example_${random_password.random_string_FAKE.resulT}"
+  image = docker_image.nginx.latest
+  name  = "example_${random_password.random_string.result}"
 
   ports {
     internal = 80
