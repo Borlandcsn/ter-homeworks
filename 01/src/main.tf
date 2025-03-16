@@ -9,12 +9,13 @@ terraform {
       version = "~> 3.0"
     }
   }
-  required_version = ">=1.8.4" #Требуемая версия terraform
+  required_version = ">=1.8.4" # Требуемая версия Terraform
 }
+
 provider "docker" {}
 provider "random" {}
-#однострочный комментарий
 
+# Создание случайной строки
 resource "random_password" "random_string" {
   length      = 16
   special     = false
@@ -23,13 +24,15 @@ resource "random_password" "random_string" {
   min_numeric = 1
 }
 
+# Создание Docker-образа
 resource "docker_image" "nginx" {
   name         = "nginx:latest"
   keep_locally = true
 }
 
+# Создание Docker-контейнера
 resource "docker_container" "nginx" {
-  image = docker_image.nginx.latest
+  image = docker_image.nginx.name
   name  = "example_${random_password.random_string.result}"
 
   ports {
